@@ -31,6 +31,55 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        )
 };
 
+/**
+ *
+ * @see https://blog.naver.com/skywood1/221822332540
+ *
+ * @param keycode
+ * @param record
+ * @return
+ */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    return true;
+    switch (keycode) {
+        case KC_ESC: // SHIFT + ESC키에 '~' 대체
+            // 키보드가 눌렸을 경우
+            if (record->event.pressed) {
+                // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
+                if (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT)) {
+                    // SHIFT+ESC를 '~'키로 정의를 한다.
+                    register_code(KC_TILD);
+                } else {
+                    // ESC만 눌린 경우 ESC키로 정의한다.
+                    register_code(KC_ESC);
+                }
+            } else { // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
+                unregister_code(KC_TILD);
+                unregister_code(KC_ESC);
+            }
+
+            return false; // 발생한 키 처리를 했으니 false 처리를 하여 중복으로 넘겨주지 않도록 한다.
+
+        case KC_DEL: // SHIFT + DEL키에 INSERT키 대입
+            if (record->event.pressed) { // 키보드가 눌렸을 경우
+                // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
+                if (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT)) {
+                    // SHIFT+DEL을 INSERT키로 치환하는 것이기 때문에 SHIFT+INSERT가 되지 않게 SHIFT를 빼준다.
+                    if (get_mods() & MOD_BIT(KC_LSHIFT)) unregister_code(KC_LSHIFT); // Left SHIFT키가 눌렸을 경우 해제한다.
+                    if (get_mods() & MOD_BIT(KC_RSHIFT)) unregister_code(KC_RSHIFT); // Right SHIFT키가 눌렸을 경우 해제한다.
+
+                    // SHIFT+DEL를 INSERT키로 정의를 한다.
+                    register_code(KC_INS);
+                } else {
+                    // DEL만 눌린 경우 DEL키로 정의한다.
+                    register_code(KC_DEL);
+                }
+            } else { // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
+                unregister_code(KC_INS);
+                unregister_code(KC_DEL);
+            }
+            return false; // 발생한 키 처리를 했으니 false 처리를 하여 중복으로 넘겨주지 않도록 한다.
+
+        default:
+            return true; // Process all other keycodes normally
+    }
 }
