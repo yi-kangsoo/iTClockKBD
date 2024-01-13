@@ -1,7 +1,29 @@
 {
-    "keyboard_name": "WingB",
+    "keyboard_name": "iTClock-WingB",
+    "maintainer": "iTClock",
+    "manufacturer": "Mastery",
+    "processor": "atmega32u4",
+    "bootloader": "atmel-dfu",
+    "usb": {
+        "vid": "0xFEED",
+        "pid": "0x6666",
+        "device_version": "2004.1.0"
+    },
+    "matrix_pins": {
+        "cols": [ "D4", "C6", "D7", "E6", "B4", "B5" ],
+        "rows": [ "F6", "F7", "B1", "B3", "B2", "B6" ]
+    },
+    "diode_direction": "COL2ROW",
+    "split": {
+        "soft_serial_pin": "D0",
+        "matrix_pins": {
+            "right": {
+                "cols": [ "D4", "C6", "D7", "E6", "B4", "B5" ],
+                "rows": [ "F6", "F7", "B1", "B3", "B2", "B6" ]
+            }
+        }
+    },
     "url": "",
-    "maintainer": "qmk",
     "width": 17,
     "height": 9,
     "layouts": {
