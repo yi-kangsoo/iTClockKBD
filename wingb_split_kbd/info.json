@@ -7,21 +7,27 @@
     "usb": {
         "vid": "0xFEED",
         "pid": "0x6666",
-        "device_version": "2004.1.0"
+        "device_version": "0.0.1"
     },
     "matrix_pins": {
-        "cols": [ "D4", "C6", "D7", "E6", "B4", "B5" ],
-        "rows": [ "F6", "F7", "B1", "B3", "B2", "B6" ]
+        "cols": ["D4", "C6", "D7", "E6", "B4", "B5"],
+        "rows": ["F6", "F7", "B1", "B3", "B2", "B6"]
     },
     "diode_direction": "COL2ROW",
     "split": {
         "soft_serial_pin": "D0",
         "matrix_pins": {
             "right": {
-                "cols": [ "D4", "C6", "D7", "E6", "B4", "B5" ],
-                "rows": [ "F6", "F7", "B1", "B3", "B2", "B6" ]
+                "cols": ["D4", "C6", "D7", "E6", "B4", "B5"],
+                "rows": ["F6", "F7", "B1", "B3", "B2", "B6"]
             }
         }
+    },
+    "tapping": {
+        "term": 100
+    },
+    "dynamic_keymap": {
+        "layer_count": 6
     },
     "url": "",
     "width": 17,

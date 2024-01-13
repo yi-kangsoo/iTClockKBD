@@ -1,4 +1,4 @@
-#include "wingB.h"
+#include "wingb_split_kbd.h"
 
 void matrix_init_kb(void) {
 
