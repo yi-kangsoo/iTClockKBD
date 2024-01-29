@@ -8,6 +8,11 @@
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
 
+enum custom_keycodes {
+    M_COPY = SAFE_RANGE,
+    M_SCR_LOCK
+};
+
 // @see https://docs.qmk.fm/#/keycodes_basic
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         [_QWERTY] = LAYOUT(
@@ -41,48 +46,72 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * @return
  */
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-//    switch (keycode) {
-//        case KC_ESC: // SHIFT + ESC키에 '~' 대체
-//            // 키보드가 눌렸을 경우
-//            if (record->event.pressed) {
-//                // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
-//                if (get_mods() & MOD_MASK_SHIFT) { //MOD_BIT(KC_LSFT) || get_mods() & MOD_BIT(KC_RSFT)) {
-//                    // SHIFT+ESC를 '~'키로 정의를 한다.
-//                    register_code(KC_GRV);
-//                } else {
-//                    // ESC만 눌린 경우 ESC키로 정의한다.
-//                    register_code(KC_ESC);
-//                }
-//            } else { // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
-//                unregister_code(KC_GRV);
-//                unregister_code(KC_ESC);
-//            }
-//
-//            return false; // 발생한 키 처리를 했으니 false 처리를 하여 중복으로 넘겨주지 않도록 한다.
-//
-//        case KC_DEL: // SHIFT + DEL키에 INSERT키 대입
-//            if (record->event.pressed) { // 키보드가 눌렸을 경우
-//                // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
-//                if (get_mods() & MOD_MASK_SHIFT) {
-//                    // SHIFT+DEL을 INSERT키로 치환하는 것이기 때문에 SHIFT+INSERT가 되지 않게 SHIFT를 빼준다.
-//                    if (get_mods() & MOD_BIT(KC_LSFT)) unregister_code(KC_LSFT); // Left SHIFT키가 눌렸을 경우 해제한다.
-//                    if (get_mods() & MOD_BIT(KC_RSFT)) unregister_code(KC_RSFT); // Right SHIFT키가 눌렸을 경우 해제한다.
-//
-//                    // SHIFT+DEL를 INSERT키로 정의를 한다.
-//                    register_code(KC_INS);
-//                } else {
-//                    // DEL만 눌린 경우 DEL키로 정의한다.
-//                    register_code(KC_DEL);
-//                }
-//            } else { // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
-//                unregister_code(KC_INS);
-//                unregister_code(KC_DEL);
-//            }
-//            return false; // 발생한 키 처리를 했으니 false 처리를 하여 중복으로 넘겨주지 않도록 한다.
-//
-//        default:
-//            return true; // Process all other keycodes normally
-//    }
+    switch (keycode) {
+        case KC_ESC: // SHIFT + ESC키에 '~' 대체
+            // 키보드가 눌렸을 경우
+            if (record->event.pressed) {
+                // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
+                if (get_mods() & MOD_MASK_SHIFT) { //MOD_BIT(KC_LSFT) || get_mods() & MOD_BIT(KC_RSFT)) {
+                    // SHIFT+ESC를 '~'키로 정의를 한다.
+                    register_code(KC_GRV);
+                } else {
+                    // ESC만 눌린 경우 ESC키로 정의한다.
+                    register_code(KC_ESC);
+                }
+            } else { // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
+                unregister_code(KC_GRV);
+                unregister_code(KC_ESC);
+            }
+
+            return false; // 발생한 키 처리를 했으니 false 처리를 하여 중복으로 넘겨주지 않도록 한다.
+
+        case KC_DEL: // SHIFT + DEL키에 INSERT키 대입
+            if (record->event.pressed) { // 키보드가 눌렸을 경우
+                // 왼쪽 SHIFT키와 오른쪽 SHIFT키가 눌렸는지 확인
+                if (get_mods() & MOD_MASK_SHIFT) {
+                    // SHIFT+DEL을 INSERT키로 치환하는 것이기 때문에 SHIFT+INSERT가 되지 않게 SHIFT를 빼준다.
+                    if (get_mods() & MOD_BIT(KC_LSFT)) unregister_code(KC_LSFT); // Left SHIFT키가 눌렸을 경우 해제한다.
+                    if (get_mods() & MOD_BIT(KC_RSFT)) unregister_code(KC_RSFT); // Right SHIFT키가 눌렸을 경우 해제한다.
+
+                    // SHIFT+DEL를 INSERT키로 정의를 한다.
+                    register_code(KC_INS);
+                } else {
+                    // DEL만 눌린 경우 DEL키로 정의한다.
+                    register_code(KC_DEL);
+                }
+            } else { // 키보드가 눌리지 않았을 경우 등록된 코드를 풀어준다.
+                unregister_code(KC_INS);
+                unregister_code(KC_DEL);
+            }
+            return false; // 발생한 키 처리를 했으니 false 처리를 하여 중복으로 넘겨주지 않도록 한다.
+
+        case M_COPY:
+            if (record->event.pressed) {
+                register_code(KC_LCMD);
+
+                if (record->tap.count == 1) {
+                    register_code(KC_C);
+                    unregister_code(KC_C);
+                } else if (record->tap.count == 2) {
+                    register_code(KC_X);
+                    unregister_code(KC_X);
+                } else {
+                    register_code(KC_C);
+                    unregister_code(KC_C);
+                };
+
+                unregister_code(KC_LCMD);
+            }
+            break;
+
+        case M_SCR_LOCK:
+            // https://github.com/qmk/qmk_firmware/blob/master/docs/feature_macros.md
+            SEND_STRING(SS_DOWN(X_LCTL) SS_DOWN(X_LCMD) "q" SS_DELAY(200) SS_UP(X_LCTL) SS_UP(X_LCMD) SS_UP(X_LCTL));
+            return false;
+
+        default:
+            return true; // Process all other keycodes normally
+    }
 
     return true; // Process all other keycodes normally
 }
