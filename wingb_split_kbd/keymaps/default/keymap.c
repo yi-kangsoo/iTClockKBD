@@ -13,6 +13,13 @@ enum custom_keycodes {
     M_SCR_LOCK
 };
 
+const uint16_t PROGMEM esc_combo1[] = {KC_BSPC, KC_E, COMBO_END};
+const uint16_t PROGMEM grave_combo2[] = {KC_BSPC, KC_G, COMBO_END};
+combo_t key_combos[] = {
+        COMBO(esc_combo1, KC_ESC),
+        COMBO(grave_combo2, KC_GRAVE),
+};
+
 // @see https://docs.qmk.fm/#/keycodes_basic
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         [_QWERTY] = LAYOUT(
